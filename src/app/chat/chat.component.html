@@ -1,0 +1,41 @@
+<div class="card m-4">
+    <div class="card card-header">
+
+        <ul class="nav nav-pills card-header-pills">
+
+            <li class="nav-item mx-2" *ngIf="!conectado">
+                <input [(ngModel)]="mensaje.username" type="text" class="form-control" placeholder="Escribe tu nombre" name="username">
+            </li>
+
+            <li class="nav-item">
+                <button class="btn btn-success" type="button"
+                (click)="conectar()" style="margin-right: 20px;"
+                *ngIf="!conectado" [disabled]="!mensaje.username">Conectar</button>
+            </li>
+            <li class="nav-item">
+                <button class="btn btn-danger" type="button" *ngIf="conectado" (click)="desconectar()">Desconectar</button>
+            </li>
+        </ul>
+
+    </div>
+
+    <div #scrollChat [scrollTop]="scrollChat.scrollHeight" class="card card-body" style="overflow-y: scroll; height: 400px;" *ngIf="conectado">
+        <ul class="list-group list-group-flush">
+            <li *ngFor="let mensaje of mensajes" class="list-group-item list-group-item-light">
+               <span *ngIf="mensaje.tipo=='NUEVO_USUARIO'"> {{ mensaje.fecha | date: 'shortTime' }} - {{ mensaje.texto }} @<span [ngStyle]="{'color': mensaje.color}">{{ mensaje.username }}</span> </span>
+               <span *ngIf="mensaje.tipo=='MENSAJE'"> {{ mensaje.fecha | date: 'shortTime' }} @<span [ngStyle]="{'color': mensaje.color}">{{ mensaje.username }}</span> : {{ mensaje.texto }} </span>
+            </li>
+        </ul>
+    </div>
+    <div class="card card-footer" *ngIf="conectado">
+        <form class="form-inline">
+            <div class="form-group mx-3 text-center">
+                <input (keyup)="escribiendoEvento()" [(ngModel)]="mensaje.texto" type="text" class="form-control" placeholder="Escribe un mensaje" name="texto">
+                <button (click)="enviarMensaje()" class="btn btn-primary my-3 btn-lg" type="submit">Enviar</button>
+            </div>
+        </form>
+        <div>
+            {{ escribiendo }}
+        </div>
+    </div>
+</div>
